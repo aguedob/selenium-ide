@@ -343,7 +343,7 @@ function runJest(project) {
       )
       .concat(
         program.json
-          ? [ '--json']
+          ? [ '--json', '--silent', '--reporters' ]
           : []
       )
     const opts = {
