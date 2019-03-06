@@ -72,6 +72,14 @@ program
     'Write test results to files, results written in JSON'
   )
   .option(
+    '--silent',
+    'Silent output'
+  )
+  .option(
+    '--json',
+    'Results written in JSON to standard output'
+  )
+  .option(
     '--force',
     "Forcibly run the project, regardless of project's version"
   )
@@ -97,6 +105,10 @@ if (!program.args.length && !program.run) {
 
 winston.cli()
 winston.level = program.debug ? 'debug' : 'info'
+
+if (program.silent){
+  winston.remove(winston.transports.Console)
+}
 
 if (program.extract || program.run) {
   winston.warn(
@@ -327,6 +339,11 @@ function runJest(project) {
                 : '../' +
                   path.join(program.outputDirectory, `${project.name}.json`),
             ]
+          : []
+      )
+      .concat(
+        program.json
+          ? [ '--json']
           : []
       )
     const opts = {
